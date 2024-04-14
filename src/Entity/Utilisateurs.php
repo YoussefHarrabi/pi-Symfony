@@ -3,12 +3,20 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Repository\UtilisateurRepository;
 use DateTime;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Table(name: "utilisateurs")]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
+
+/**
+ * @ORM\Table(name="utilisateurs", uniqueConstraints={@ORM\UniqueConstraint(name="unique_email", columns={"email"})})
+ * @UniqueEntity("email", message="This email is already in use.")
+ */
 class Utilisateurs implements UserInterface
 {
     #[ORM\Column(name: "ID", type: "integer", nullable: false)]
@@ -17,12 +25,27 @@ class Utilisateurs implements UserInterface
     private int $id;
 
     #[ORM\Column(name: "Nom", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message: 'Nom cannot be empty.')]
+    #[Assert\Length(max: 255, maxMessage: 'Nom cannot be longer than {{ limit }} characters.')]
     private string $nom;
 
+
     #[ORM\Column(name: "Prenom", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message: 'Prenom cannot be empty.')]
+    #[Assert\Length(max: 255, maxMessage: 'Prenom cannot be longer than {{ limit }} characters.')]
+    #[Assert\NotNull]
+    
     private string $prenom;
 
     #[ORM\Column(name: "Email", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message: 'Email cannot be empty.')]
+    #[Assert\Email(message: 'Invalid email format.')]
+    #[Assert\Length(max: 255, maxMessage: 'Email cannot be longer than {{ limit }} characters.')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+        message: 'Invalid email format.'
+    )]
+    #[Assert\NotNull]
     private string $email;
 
     #[ORM\Column(name: "mot_de_passe", type: "string", length: 255, nullable: false)]
@@ -34,8 +57,33 @@ class Utilisateurs implements UserInterface
     #[ORM\Column(name: "verification_code", type: "string", length: 10, nullable: true)]
     private ?string $verificationCode;
 
+    #[ORM\Column(name: "url", type: "string", length: 255, nullable: true)]
+    private ?string $url;
+
+    
     #[ORM\Column(name: "age", type: "string", length: 255, nullable: true)]
+    #[Assert\NotBlank(message: 'Age cannot be blank.')]
+    #[Assert\Type(type: 'string', message: 'Age must be a string.')]
+    #[Assert\Regex(
+        pattern: '/^\d{4}-\d{2}-\d{2}$/',
+        message: 'Invalid date format. Please use YYYY-MM-DD.'
+    )]
     private ?string $age;
+    /**
+     * @Assert\Callback
+     */
+    public function validateAge(ExecutionContextInterface $context): void
+    {
+        if ($this->age) {
+            $inputDate = \DateTime::createFromFormat('Y-m-d', $this->age);
+            $today = new \DateTime();
+            if ($inputDate > $today) {
+                $context->buildViolation('Age cannot be in the future.')
+                    ->atPath('age')
+                    ->addViolation();
+            }
+        }
+    }
 
     #[ORM\Column(name: "is_valid", type: "boolean", nullable: true)]
     private ?bool $isValid;
@@ -127,10 +175,20 @@ class Utilisateurs implements UserInterface
         }
         return $this;
     }
+    public function getUrl(): ?string
+        {
+            return $this->url;
+        }
 
-    public function isIsvalid(): ?bool
+    public function setUrl(?string $url): static
+        {
+            $this->url = $url;
+            return $this;
+        }
+
+    public function isValid(): ?bool
     {
-        return $this->isvalid;
+        return $this->isValid;
     }
 
     public function setIsvalid(?bool $isvalid): static
@@ -161,6 +219,7 @@ class Utilisateurs implements UserInterface
         // Return null if you're using modern password hashing methods like bcrypt
         return null;
     }
+    
 
     public function eraseCredentials()
     {

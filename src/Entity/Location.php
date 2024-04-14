@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LocationRepository;
 
-#[ORM\Entity(repositoryClass: App\Repository\LocationRepository::class)]
 #[ORM\Table(name: "location")]
+#[ORM\Entity(repositoryClass: LocationRepository::class)]
+
 class Location
 {
     #[ORM\Id]

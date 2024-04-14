@@ -12,6 +12,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
+use DateTime;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 
 class UserController extends AbstractController
@@ -21,10 +24,16 @@ class UserController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, Security $security)
     {
-        // Check if the user is already authenticated
+      
+         // Check if the user is already authenticated
         if ($security->getUser() !== null) {
-            // User is already authenticated, redirect to the home page
-            return $this->redirectToRoute('ListeUsers'); // Replace 'home_page' with the name of your home page route
+            // User is already authenticated, redirect based on their role
+            $roles = $security->getUser()->getRoles();
+            if (in_array('ROLE_ADMIN', $roles, true)) {
+                return $this->redirectToRoute('Home');
+            } else {
+                return $this->redirectToRoute('Home2');
+            }
         }
 
         // Get the login error if there is one
@@ -37,6 +46,7 @@ class UserController extends AbstractController
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+           
         ]);
 
 
@@ -216,4 +226,64 @@ class UserController extends AbstractController
             'users' => $users,
         ]);
     }
+
+    
+#[Route('/update/user/{id}', name: 'update_user', methods: ['POST'])]
+public function updateUser(Request $request, int $id,ValidatorInterface $validator): Response
+{
+    // Fetch user data from the database
+    $entityManager = $this->getDoctrine()->getManager();
+    $userRepository = $entityManager->getRepository(Utilisateurs::class);
+    $user = $userRepository->find($id);
+
+    // Update user data based on form submission
+    $user->setNom($request->request->get('nom'));
+    $user->setPrenom($request->request->get('prenom'));
+    $user->setEmail($request->request->get('email'));
+   // Convert string to DateTime for the 'age' property
+    $ageString = $request->request->get('age');
+    $age = new DateTime($ageString); // Create a DateTime object from the string
+    $user->setAge($age);
+    
+    $user->setRole($request->request->get('role'));
+    // Validate the user entity
+    $errors = $validator->validate($user);
+
+    // Check for validation errors
+    if (count($errors) > 0) {
+        // Collect error messages
+        $errorMessages = [];
+        foreach ($errors as $error) {
+            $errorMessages[] = $error->getMessage();
+        }
+
+        // Add flash messages for error messages
+        foreach ($errorMessages as $errorMessage) {
+            $this->addFlash('error', $errorMessage);
+        }
+
+        // Redirect back to the list page
+        return $this->redirectToRoute('ListeUsers');
+    }
+
+    // Persist the updated user entity
+    $entityManager->persist($user);
+    $entityManager->flush();
+
+    // Redirect back to the list page
+    return $this->redirectToRoute('ListeUsers');
+}
+#[Route('/delete/{id}', name: 'delete_user', methods: ['POST'])]
+public function deleteUser(Utilisateurs $user, Request $request): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($user);
+    $entityManager->flush();
+
+    // Redirect to the desired page after deletion
+    // For example, redirect to the user list page
+    return $this->redirectToRoute('ListeUsers');
+}
+
+
 }

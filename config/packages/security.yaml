@@ -19,13 +19,14 @@ security:
             form_login:
                 login_path: app_login # Route name for the login page
                 check_path: app_login # Route name for submitting login credentials
+                default_target_path: app_login
                 username_parameter: email
-                default_target_path: ListeUsers
+                
 
             logout:
                 path: app_logout # Route name for logging out
                 target: app_login 
-                
+            
            
 
             # activate different ways to authenticate
@@ -36,9 +37,10 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+  
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/Liste, roles: ROLE_ADMIN }
     encoders:
         App\Entity\Utilisateurs:
             algorithm: auto

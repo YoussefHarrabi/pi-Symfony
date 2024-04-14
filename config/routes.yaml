@@ -2,6 +2,7 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-Home:
-    path: /Home
-    controller: App\Controller\HomeController::Home
+HomeUser:
+    path: /HomeUser
+    controller: App\Controller\HomeController::HomeUser
+
