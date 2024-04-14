@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags, stylesheets, and scripts -->
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Login</div>
+
+                    <div class="card-body">
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
+                        {% endif %}
+
+                        <form method="post">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" value="{{ last_username }}" required autofocus>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="_password" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" class="form-check-input">
+                                    <label for="remember_me" class="form-check-label">Remember me</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+</body>
+</html>
