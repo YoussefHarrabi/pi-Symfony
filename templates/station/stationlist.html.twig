@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h1>Station List</h1>
+
+<table>
+<table id="basic-data-table" class="table nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Adress</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for Station in Stations %}
+        <tr>
+            <td>{{ Station.name }}</td>
+            <td>{{ Station.address }}</td>
+            <td>
+      <a href ="{{ path('Station_update', {'id': Station.id}) }}" class="btn btn-primary">Update</a> 
+                <a href ="{{ path('Station_delete', {'id': Station.id}) }}" class="btn btn-primary">Delete</a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+  <a href ="{{ path('Station_add') }}" class="btn btn-primary">Add</a>
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
+
 #[\Doctrine\ORM\Mapping\Entity(repositoryClass: App\Repository\TrafficRepository::class)]
 #[\Doctrine\ORM\Mapping\Table(name: "traffic")]
 class Traffic
