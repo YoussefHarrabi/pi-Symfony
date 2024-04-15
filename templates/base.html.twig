@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet" />
 
     <link href="https://cdn.materialdesignicons.com/4.4.95/css/materialdesignicons.min.css" rel="stylesheet" />
-    {% block stylesheets %}
+  
     <!-- PLUGINS CSS STYLE -->
     <link href="{{asset('assets/plugins/simplebar/simplebar.css') }}" rel="stylesheet" />
     <link href="{{asset('assets/plugins/nprogress/nprogress.css') }}" rel="stylesheet" />
@@ -34,7 +34,7 @@
     
 
     <!-- SLEEK CSS -->
-    <link id="sleek-css" rel="stylesheet" href="assets/css/sleek.css" />
+    <link id="sleek-css" rel="stylesheet" href="{{asset('assets/css/sleek.css') }}" />
   
     <!-- FAVICON -->
     <link href="{{asset('assets/img/favicon.png') }}" rel="shortcut icon" />
@@ -48,9 +48,9 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="{{asset('assets/plugins/nprogress/nprogress.js') }}"></script>
-    {% endblock %}
+  
   </head>
-  {% block header %}
+  
   <body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
     <script>
       NProgress.configure({ showSpinner: false });
@@ -745,7 +745,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u2.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u2.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -764,7 +764,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification media-active">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u1.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u1.jpg') }}" alt="Image">
                                     <span class="status active"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -783,7 +783,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u5.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u5.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -910,7 +910,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u6.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u6.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -929,7 +929,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u7.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u7.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -948,7 +948,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification media-active">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u1.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u1.jpg') }}" alt="Image">
                                     <span class="status active"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -967,7 +967,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u2.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u2.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -986,7 +986,7 @@
                               <li>
                                 <a href="javscript:void(0)" class="media media-message media-notification">
                                   <div class="position-relative mr-3">
-                                    <img class="rounded-circle" src="assets/img/user/u5.jpg" alt="Image">
+                                    <img class="rounded-circle" src="{{asset('assets/img/user/u5.jpg') }}" alt="Image">
                                     <span class="status away"></span>
                                   </div>
                                   <div class="media-body d-flex justify-content-between">
@@ -1158,17 +1158,20 @@
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">Abdus Salam</span>
+                      <img src="{{asset('assets/img/user/user.png') }}" class="user-image" alt="User Image" />
+                      {# Check if the user is authenticated #}
+                      
+                      <span class="d-none d-lg-inline-block">{% if app.user %}{{ app.user.Nom }}{% endif %}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <!-- User image -->
                       <li class="dropdown-header">
-                        <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
+                        <img src="{{asset('assets/img/user/user.png') }}" class="img-circle" alt="User Image" />
                         <div class="d-inline-block">
-                          Abdus Salam <small class="pt-1">iamabdus@gmail.com</small>
+                          {% if app.user %}{{ app.user.Nom }}{% endif %} <small class="pt-1">{% if app.user %}{{ app.user.email }}{% endif %}</small>
                         </div>
                       </li>
+                      
 
                       <li>
                         <a href="user-profile.html">
@@ -1202,7 +1205,7 @@
               </div>
             </nav>
           </header>
-          {% endblock %}
+        
           {% block content %}
           {% endblock %}
 

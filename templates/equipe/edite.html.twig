@@ -1,0 +1,35 @@
+{# templates/equipe/edite.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Update Equipe{% endblock %}
+
+{% block content %}
+    <h1>Update Equipe</h1>
+    <form action="{{ path('equipe_edit', {'id': equipe.getId()}) }}" method="POST">
+        <div class="form-group">
+            <label for="relationTo">Relation:</label>
+            <input type="text" id="relationTo" name="relationTo" value="{{ equipe.getRelationTo() }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="nbrPersonne">Nombre de personnes:</label>
+            <input type="number" id="nbrPersonne" name="nbrPersonne" value="{{ equipe.getNbrPersonne() }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="work">Travail associé:</label>
+            <select id="work" name="work" class="form-control" required>
+                {% if equipe.getWork() is not null %}
+                    <option value="{{ equipe.getWork().getId() }}" selected>{{ equipe.getWork().getLocation() }}</option>
+                {% endif %}
+                {# Afficher tous les travaux disponibles (optionnel) #}
+                {% for work in works %}
+                    <option value="{{ work.getWorkid() }}">{{ work.getLocation() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+{% endblock %}

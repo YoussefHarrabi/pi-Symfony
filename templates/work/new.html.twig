@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Work{% endblock %}
+
+{% block content %}
+    <h1>New Work</h1>
+    
+
+    {# Display global form errors if any #}
+    {% if form_errors(form) %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in form_errors(form) %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {{ form_start(form) }}
+
+    {# Render each form field with labels and error messages #}
+    <div class="form-group">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location, {'attr': {'class': 'form-control'}}) }}
+        {# Display field-specific errors if any #}
+        {% if form_errors(form.location) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.location) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.startdate) }}
+        {{ form_widget(form.startdate, {'attr': {'class': 'form-control'}}) }}
+        {% if form_errors(form.startdate) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.startdate) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.enddate) }}
+        {{ form_widget(form.enddate, {'attr': {'class': 'form-control'}}) }}
+        {% if form_errors(form.enddate) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.enddate) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        {% if form_errors(form.description) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.description) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.isactive) }}
+        {{ form_widget(form.isactive, {'attr': {'class': 'form-check-input'}}) }}
+        {% if form_errors(form.isactive) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.isactive) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+
+    {{ form_end(form) }}
+{% endblock %}

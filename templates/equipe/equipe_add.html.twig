@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une Équipe{% endblock %}
+
+{% block content %}
+    <h1>Ajouter une Équipe</h1>
+
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.relationTo) }}
+        {{ form_widget(form.relationTo, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.nbrPersonne) }}
+        {{ form_widget(form.nbrPersonne, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.work) }}
+        {{ form_widget(form.work, {'attr': {'class': 'form-control'}}) }}
+    </div>
+  
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Entity;
+use App\Repository\WorkRepository;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: "work")]
-#[ORM\Entity(repositoryClass: App\Repository\WorkRepository::class)]
+#[ORM\Entity(repositoryClass: WorkRepository::class)]
 class Work
 {
     #[ORM\Column(name: "workID", type: "integer", nullable: false)]
