@@ -1,0 +1,109 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Incident index{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-default">
+        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+            <h2> Incidents</h2>
+            <a href="{{ path('incident_new') }}" class="btn btn-primary btn-sm">New</a>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                {% for incident in incidents %}
+                {% set currentDate = "now"|date('Y-m-d') %}
+                {% set incidentDate = incident.date ? incident.getDate() : '' %}
+                {% if incidentDate == currentDate %}
+                {% set currentTime = "now"|date('U') %}
+                {% set incidentTime = incident.hour ? incident.hour|date('U') : 0 %}
+                {% if currentTime - incidentTime <= 1800 %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ incident.type }}</h5>
+                            <p class="card-text">Description: {{ incident.description }}</p>
+                            <p class="card-text">Place: {{ incident.place }}</p>
+                            <p class="card-text">Hour: {{ incident.hour ? incident.hour|date('H:i') : '' }}</p>
+                            <p class="card-text">Date: {{ incident.date|date('Y-m-d') }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ path('incident_edit', {'id': incident.IncidentId}) }}" class="btn btn-primary btn-sm">Update</a>
+                            <form action="{{ path('incident_delete', {'id': incident.IncidentId}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this incident?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ incident.IncidentId) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* Set a fixed height for the card */
+    .icon-box {
+        min-height: 400px; 
+        min-width: 300px;
+    }
+    .openmoji--warning-strip-right {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cpath fill='%23000' d='M30.33 25.54L20.59 7.6a3 3 0 0 0-5.27 0L5.57 25.54A3 3 0 0 0 8.21 30h19.48a3 3 0 0 0 2.64-4.43Zm-13.87-12.8a1.49 1.49 0 0 1 3 0v6.89a1.49 1.49 0 1 1-3 0ZM18 26.25a1.72 1.72 0 1 1 1.72-1.72A1.72 1.72 0 0 1 18 26.25' class='clr-i-solid clr-i-solid-path-1'/%3E%3Cpath fill='none' d='M0 0h36v36H0z'/%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+</style>
+
+<script>
+
+    // Function to report an incident
+    function reportIncident(incidentId) {
+        // Perform the reporting action
+        console.log('Incident reported:', incidentId);
+    }
+
+     // Function to calculate and display the rush hour
+    function calculateRushHour(incidents) {
+        const hourCounts = {};
+        let maxCount = 0;
+        let rushHour = '';
+
+        incidents.forEach(incident => {
+            const hour = incident.hour ? new Date(incident.hour).getHours() : null;
+
+            if (hour !== null) {
+                hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+
+                if (hourCounts[hour] > maxCount) {
+                    maxCount = hourCounts[hour];
+                    rushHour = hour;
+                }
+            }
+        });
+
+        document.getElementById('rushHour').textContent = rushHour !== '' ? rushHour + ':00' : 'N/A';
+    }
+
+    // Call the calculateRushHour function when the page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        const incidents = JSON.parse('{{ incidents | json_encode() | raw }}');
+        calculateRushHour(incidents);
+    });
+</script>
+{% endblock %}

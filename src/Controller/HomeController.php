@@ -28,4 +28,12 @@ class HomeController extends AbstractController
             
         ]);
     }
+    #[Route('/admin', name: 'Home2')]
+    public function Admin(Request $request): Response
+    {
+        
+        return $this->render('base.html.twig', [
+            
+        ]);
+    }
 }

@@ -8,7 +8,7 @@
         <h3>Edit Injury</h3>
         <p>Fill in the data below.</p>
         <form class="requires-validation" novalidate action="{{ path('app_injury_edit', {'id': injury.id}) }}" method="post">
-            {{ form_start(form) }}
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="form-group">
                 <label for="type">Type</label>
                 {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Type'}}) }}

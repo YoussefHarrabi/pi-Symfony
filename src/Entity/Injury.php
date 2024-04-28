@@ -17,7 +17,7 @@ class Injury
    
     #[Assert\NotBlank(message: "Incident ID must not be empty")]
     #[ORM\ManyToOne(targetEntity: "App\Entity\Incident")]
-    #[ORM\JoinColumn(name: "incidentId", referencedColumnName: "IncidentId")]
+    #[ORM\JoinColumn(name: "IncidentId", referencedColumnName: "IncidentId")]
     private $incident;
 
     #[ORM\Column(name: "type", type: "string", length: 255, nullable: true)]

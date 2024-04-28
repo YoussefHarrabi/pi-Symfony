@@ -5,73 +5,183 @@ namespace App\Controller;
 use App\Entity\Incident;
 use App\Form\IncidentType;
 use App\Repository\IncidentRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use SebastianBergmann\Environment\Console;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use MercurySeries\FlashyBundle\FlashyNotifier;
+
 
 #[Route('/incident')]
 class IncidentController extends AbstractController
 {
-    #[Route('/', name: 'app_incident_index', methods: ['GET'])]
+   
+    
+    #[Route('/', name: 'app_incident_index')]
     public function index(IncidentRepository $incidentRepository): Response
     {
+        // Fetch all incidents from the repository
+        $incidents = $incidentRepository->findAll();
+    
+        // Initialize an array to store the count of incidents for each hour of the day
+        $hourlyCounts = array_fill(0, 24, 0);
+    
+        // Count incidents for each hour
+        foreach ($incidents as $incident) {
+            $hour = $incident->getHour();
+            if ($hour instanceof \DateTimeInterface) {
+                // Extract the hour from the DateTime object
+                $hour = (int) $hour->format('H');
+                // Increment the count for the corresponding hour
+                $hourlyCounts[$hour]++;
+            }
+        }
+    
+        // Find the hour(s) with the highest frequency
+        $maxCount = max($hourlyCounts);
+        $rushHours = array_keys($hourlyCounts, $maxCount);
+    
+        // Format the rush hour(s)
+        $formattedRushHours = [];
+        foreach ($rushHours as $rushHour) {
+            $formattedRushHours[] = "{$rushHour}:00 - " . ($rushHour + 1) . ":00 ({$maxCount} incidents)";
+        }
+    
+        // Combine the rush hour(s) into a single string
+        $rushHourText = implode(", ", $formattedRushHours);
+    
+        // Pass the rush hour text to the template
         return $this->render('incident/index.html.twig', [
+            'rushHour' => $rushHourText,
+            'incidents' => $incidents, // Pass all incidents to the template
+        ]);
+    }
+    #[Route('2/', name: 'app_incident_index2', methods: ['GET'])]
+    public function index2(IncidentRepository $incidentRepository): Response
+    {
+        return $this->render('incident/indexback.html.twig', [
             'incidents' => $incidentRepository->findAll(),
         ]);
     }
 
+    
     #[Route('/new', name: 'app_incident_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,FlashyNotifier $flashy): Response
     {
         $incident = new Incident();
+
+        // Set the date of the incident to today's date
+        $incident->setDate(new \DateTime());
+    
         $form = $this->createForm(IncidentType::class, $incident);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($incident);
             $entityManager->flush();
+    
+            // Flash success message
+            $flashy->success('New incident is created!');
 
+    
             return $this->redirectToRoute('app_incident_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->renderForm('incident/new.html.twig', [
             'incident' => $incident,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{incidentid}', name: 'app_incident_show', methods: ['GET'])]
-    public function show(Incident $incident): Response
+    #[Route('/new2', name: 'incident_new', methods: ['GET', 'POST'])]
+    public function new2(Request $request, EntityManagerInterface $entityManager,FlashyNotifier $flashy): Response
+    {
+        
+        $incident = new Incident();
+        $incident->setDate(new \DateTime());
+        $form = $this->createForm(IncidentType::class, $incident);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($incident);
+            $entityManager->flush();
+            $flashy->success('New incident is created!');
+            return $this->redirectToRoute('app_incident_index2', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('incident/newback.html.twig', [
+            'incident' => $incident,
+            'form' => $form,
+        ]);
+    }
+
+    
+    #[Route('/{id}', name: 'app_incident_show', methods: ['GET'])]
+    public function show(Incident $incident, EntityManagerInterface $entityManager): Response
     {
         return $this->render('incident/show.html.twig', [
             'incident' => $incident,
         ]);
     }
 
-    #[Route('/edit/{incidentid}', name: 'app_incident_edit', methods: ['GET', 'POST'])]
-public function edit(Request $request, Incident $incident, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createForm(IncidentType::class, $incident);
-    $form->handleRequest($request);
+    #[Route('/edit/{id}', name: 'app_incident_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Incident $incident, EntityManagerInterface $entityManager,int $id): Response
+    {
+        $incident = $entityManager->getRepository(Incident::class)->find($id);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Flush the changes to the database
-        $entityManager->flush();
+            // Check if the incident exists
+            if (!$incident) {
+                throw $this->createNotFoundException('The incident does not exist');
+            }
+        $form = $this->createForm(IncidentType::class, $incident);
+        $form->handleRequest($request);
 
-        // Redirect back to the incident page
-        return $this->redirectToRoute('app_incident_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Flush the changes to the database
+            $entityManager->flush();
+
+            // Redirect back to the incident page
+            return $this->redirectToRoute('app_incident_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('incident/edit.html.twig', [
+            'incident' => $incident,
+            'form' => $form,
+        ]);
     }
+    #[Route('/edit2/{id}', name: 'incident_edit', methods: ['GET', 'POST'])]
+    public function edit2(Request $request, Incident $incident, EntityManagerInterface $entityManager,int $id): Response
+    {
+        $incident = $entityManager->getRepository(Incident::class)->find($id);
 
-    return $this->renderForm('incident/edit.html.twig', [
-        'incident' => $incident,
-        'form' => $form,
-    ]);
-}
-    #[Route('/delete/{incidentid}', name: 'app_incident_delete', methods: ['POST'])]
+            // Check if the incident exists
+            if (!$incident) {
+                throw $this->createNotFoundException('The incident does not exist');
+            }
+        $form = $this->createForm(IncidentType::class, $incident);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Flush the changes to the database
+            $entityManager->flush();
+
+            // Redirect back to the incident page
+            return $this->redirectToRoute('app_incident_index2', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('incident/editback.html.twig', [
+            'incident' => $incident,
+            'form' => $form,
+        ]);
+    }
+    #[Route('/delete/{id}', name: 'app_incident_delete', methods: ['POST'])]
     public function delete(Request $request, Incident $incident, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$incident->getIncidentid(), $request->request->get('_token'))) {
@@ -82,16 +192,88 @@ public function edit(Request $request, Incident $incident, EntityManagerInterfac
         return $this->redirectToRoute('app_incident_index', [], Response::HTTP_SEE_OTHER);
     
     }
-    #[Route("/delete-incident/{id}", name:"delete_incident", methods:["POST"])]
+    #[Route('/delete2/{id}', name: 'incident_delete', methods: ['POST'])]
+    public function delete2(Request $request, Incident $incident, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$incident->getIncidentid(), $request->request->get('_token'))) {
+            $entityManager->remove($incident);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_incident_index2', [], Response::HTTP_SEE_OTHER);
+    
+    }
+    
+    #[Route("/delete-incident/{id}", name: "delete_incident", methods: ["POST"])]
     public function deleteIncident(Incident $incident, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Delete the incident from the database
-        $entityManager->remove($incident);
-        $entityManager->flush();
-
+        if (!$incident) {
+            return new JsonResponse(['error' => 'Incident not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+    
+        try {
+            $entityManager->remove($incident);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to delete incident: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    
         return new JsonResponse(['message' => 'Incident deleted successfully'], JsonResponse::HTTP_OK);
+        
     }
 
-   
-}
+    #[Route('/generate-excel', name: 'generate_excel', methods: ['POST'])]
+    public function generateExcel(IncidentRepository $incidentRepository): Response
+    {
+        // Fetch all incidents from the database
+        $incidents = $incidentRepository->findAll();
+    
+        // Create a new Spreadsheet object
+        $spreadsheet = new Spreadsheet();
+    
+        // Set the properties for the Excel file
+        $spreadsheet->getProperties()
+            ->setTitle('Incident Report')
+            ->setCreator('Your Name')
+            ->setLastModifiedBy('Your Name')
+            ->setDescription('Incident report generated by PHP');
+    
+        // Add a worksheet
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Incidents');
+    
+        // Add headers
+        $sheet->setCellValue('A1', 'ID')
+            ->setCellValue('B1', 'Type')
+            ->setCellValue('C1', 'Description')
+            ->setCellValue('D1', 'Place')
+            ->setCellValue('E1', 'Hour')
+            ->setCellValue('F1', 'Date');
+    
+        // Add data for each incident
+        $row = 2; // Start from the second row
+        foreach ($incidents as $incident) {
+            $sheet->setCellValue('A' . $row, $incident->getincidentId())
+                ->setCellValue('B' . $row, $incident->getType())
+                ->setCellValue('C' . $row, $incident->getDescription())
+                ->setCellValue('D' . $row, $incident->getPlace())
+                ->setCellValue('E' . $row, $incident->getHour() ? $incident->getHour()->format('H:i') : '')
+                ->setCellValue('F' . $row, $incident->getDate());
 
+    $row++;
+        }
+    
+        // Create a writer
+        $writer = new Xlsx($spreadsheet);
+    
+        // Create a temporary file to save the spreadsheet
+        $tempFile = tempnam(sys_get_temp_dir(), 'incident_report');
+        $writer->save($tempFile);
+    
+        // Return the Excel file as a response
+        return $this->file($tempFile, 'incident_report.xlsx', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    }
+
+
+    
+}

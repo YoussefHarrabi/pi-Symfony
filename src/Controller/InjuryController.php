@@ -27,6 +27,19 @@ class InjuryController extends AbstractController
             'injuries' => $injuries,
         ]);
     }
+    #[Route('2/', name: 'app_injury_index2', methods: ['GET'])]
+    public function index2(EntityManagerInterface $entityManager): Response
+    {
+        $injuries = $entityManager
+            ->getRepository(Injury::class)
+            ->findAll();
+
+           
+
+        return $this->render('injury/indexback.html.twig', [
+            'injuries' => $injuries,
+        ]);
+    }
 
     #[Route('/new', name: 'app_injury_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -43,6 +56,26 @@ class InjuryController extends AbstractController
         }
 
         return $this->renderForm('injury/new.html.twig', [
+            'injury' => $injury,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/new2', name: 'app_injury_new2', methods: ['GET', 'POST'])]
+    public function new2(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $injury = new Injury();
+        $form = $this->createForm(InjuryType::class, $injury);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($injury);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_injury_index2', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('injury/newback.html.twig', [
             'injury' => $injury,
             'form' => $form,
         ]);
@@ -73,6 +106,23 @@ class InjuryController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/edit2/{id}', name: 'app_injury_edit2', methods: ['GET', 'POST'])]
+    public function edit2(Request $request, Injury $injury, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(InjuryType::class, $injury);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_injury_index2', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('injury/editback.html.twig', [
+            'injury' => $injury,
+            'form' => $form,
+        ]);
+    }
 
     #[Route('/delete/{id}', name: 'app_injury_delete', methods: ['POST'])]
     public function delete(Request $request, Injury $injury, EntityManagerInterface $entityManager): Response
@@ -83,6 +133,17 @@ class InjuryController extends AbstractController
         }
 
         return $this->redirectToRoute('app_injury_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/delete2/{id}', name: 'app_injury_delete2', methods: ['POST'])]
+    public function delete2(Request $request, Injury $injury, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$injury->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($injury);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_injury_index2', [], Response::HTTP_SEE_OTHER);
     }
 
 

@@ -79,6 +79,7 @@ class IncidentType extends AbstractType
             ->add('place',  ChoiceType::class, [
                 'label' => 'Type',
                 'choices' => array_combine($places, $places)
+                
             ])
             ->add('hour', TimeType::class, [
                 'label' => 'Hour',

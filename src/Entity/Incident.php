@@ -124,19 +124,24 @@ class Incident
 
    public function getDate(): ?string
 {
-    if (is_string($this->date)) {
-        return $this->date; // Return the string representation if it's already a string
+    if ($this->date instanceof \DateTimeInterface) {
+        // Formater la date en chaîne de caractères
+        return $this->date->format('Y-m-d');
+    } elseif (is_string($this->date)) {
+        // Si la date est déjà une chaîne, la retourner
+        return $this->date;
+    } else {
+        // Sinon, retourner null
+        return null;
     }
-
-    return null; // Return null if $this->date is not a string
 }
+public function setDate(?\DateTimeInterface $date): static
+{
+    $this->date = $date;
 
-   public function setDate(?\DateTimeInterface $date): static
-   {
-       $this->date = $date;
-
-       return $this;
-   }
+    return $this;
+}
+ 
 
     
 

@@ -1,4 +1,4 @@
-{% extends 'base2.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Edit Incident{% endblock %}
 
@@ -8,7 +8,7 @@
         <h3>Edit Incident</h3>
         <p>Fill in the data below.</p>
         {{incident.incidentId}}
-        <form class="requires-validation" novalidate  method="post"  action="{{ path('app_incident_edit', {'id': incident.IncidentId}) }}"
+        <form class="requires-validation" novalidate  method="post"  action="{{ path('incident_edit', {'id': incident.IncidentId}) }}"
 >
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="form-group">
@@ -45,7 +45,7 @@
             </div>
             {{ form_end(form) }}
         </form>
-        <a href="{{ path('app_incident_index') }}" class="btn btn-link">Back to List</a>
+        <a href="{{ path('app_incident_index2') }}" class="btn btn-link">Back to List</a>
     </div>
 </div>
 {% endblock %}

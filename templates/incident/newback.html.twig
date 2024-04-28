@@ -1,4 +1,4 @@
-{% extends 'base2.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}New Incident{% endblock %}
 
@@ -7,10 +7,7 @@
     <div class="d-inline-block p-4 border rounded" style="width: 600px;">
         <h3>Add Incident</h3>
         <p>Fill in the data below.</p>
-        
-       
-
-        <form class="requires-validation" novalidate action="{{ path('app_incident_new') }}" method="post">
+        <form class="requires-validation" novalidate action="{{ path('incident_new') }}" method="post">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="form-group">
                 <label for="type">Type</label>
@@ -26,7 +23,7 @@
                     <span class="text-danger">{{ form_errors(form.place) }}</span>
                 {% endif %}
             </div>
-            <div class="form-group">
+           <div class="form-group">
                 <label for="hour">Hour</label>
                 {{ form_widget(form.hour, {'attr': {'class': 'form-control', 'placeholder': 'Hour', 'type': 'time', 'required': true}}) }}
                 {% if form_errors(form.hour) %}
@@ -47,11 +44,10 @@
             </div>
             {{ form_end(form) }}
         </form>
-        <a href="{{ path('app_incident_index') }}" class="btn btn-link">Back to List</a>
+        <a href="{{ path('app_incident_index2') }}" class="btn btn-link">Back to List</a>
     </div>
 </div>
 {% endblock %}
-
 
 {% block javascripts %}
     <script>
@@ -78,10 +74,5 @@
                 console.error('Hour input element not found.');
             }
         });
-
-
-        
-
-
         </script>
 {% endblock %}

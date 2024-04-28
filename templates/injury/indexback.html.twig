@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Injury index{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-default">
+        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+            <h2>Injuries</h2>
+            <a href="{{ path('app_injury_new2') }}" class="btn btn-primary btn-sm">New</a>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                {% for injury in injuries %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ injury.type }}</h5>
+                            <p class="card-text">Incident: {{ injury.incident.type }}</p>
+                            <p class="card-text">Number of Persons: {{ injury.numberPers }}</p>
+                            <p class="card-text">Severity: {{ injury.severity }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ path('app_injury_edit2', {'id': injury.id}) }}" class="btn btn-primary btn-sm">Update</a>
+                            <form action="{{ path('app_injury_delete2', {'id': injury.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this injury?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ injury.id) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Set a fixed height for the card */
+    .card {
+        min-height: 250px; 
+    }
+</style>
+
+<script>
+    // Function to filter injury cards based on search input
+    function filterInjuries() {
+        const searchInput = document.getElementById('searchInput');
+        const searchValue = searchInput.value.trim().toLowerCase();
+        const cardTitles = document.querySelectorAll('.card-title');
+
+        cardTitles.forEach(title => {
+            const card = title.closest('.col-md-6');
+            if (title.textContent.toLowerCase().includes(searchValue)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Add event listener for input change
+    document.getElementById('searchInput').addEventListener('input', filterInjuries);
+</script>
+
+{% endblock %}
