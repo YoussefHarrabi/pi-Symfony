@@ -1,0 +1,56 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Données historiques{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-default">
+        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+            <h2>Liste des Données historiques</h2>
+            <img src="{{ asset('images/donnee.png') }}" alt="donnee" style="width: 100px; height: auto;">
+        </div>
+
+        <div class="card-body">
+            <div class="basic-data-table">
+                <table id="basic-data-table" class="table nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ID Capteur</th>
+                            <th>Timestamp</th>
+                            <th>Niveau d'Embouteillage</th>
+                            <th>Alerte</th>
+                            <th>Conditions Météo</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+            {% for donnee in donnees %}
+                <tr>
+                    <td>{{ donnee.id }}</td>
+                    <td>{{ donnee.idCapteur }}</td>
+                    <td>{{ donnee.timestamp }}</td>
+                    <td>{{ donnee.niveauEmbouteillage }}</td>
+                    <td>{{ donnee.alerte }}</td>
+                    <td>{{ donnee.conditionsMeteo }}</td>
+                    <td>
+                        <a href="{{ path('app_modifierDonnees', {'id': donnee.id}) }}" class="btn btn-primary btn-sm">Update</a>
+                        <a href="{{ path('app_supprimerDonnees', {'id': donnee.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                </tr>
+            {% endfor %}
+        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+

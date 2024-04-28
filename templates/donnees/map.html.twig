@@ -1,0 +1,135 @@
+{% extends 'base2.html.twig' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <style>
+        #map { height: 500px; }
+        .location-form {
+            margin-top: 10px;
+        }
+        .location-form input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .location-form button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .location-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+{% block javascripts %}
+<!-- Include Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script>
+    var map = L.map('map').setView([33.9739, 9.59839], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+ 
+
+    {% for i in 0..donneesHistoriques|length - 1 %}
+    var color = ({{ donneesHistoriques[i].getNiveauEmbouteillage() }} < 3) ? 'green' : ({{ donneesHistoriques[i].getNiveauEmbouteillage() }} == 3) ? 'orange' : 'red';
+    var circle = L.circle([{{ latitudes[i] }}, {{ longitudes[i] }}], {
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.5,
+        radius: 500 // Réduire la taille du cercle
+    }).addTo(map);
+    {% endfor %}
+
+   // Fonction pour rechercher une localisation
+// Fonction pour rechercher une localisation
+function searchLocation() {
+    var address = document.getElementById('locationInput').value;
+
+    // Utilisation d'un service de géocodage tiers (exemple : Nominatim de OpenStreetMap)
+    var apiUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address);
+
+    // Requête GET pour récupérer les coordonnées de l'adresse saisie
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                var lat = parseFloat(data[0].lat);
+                var lon = parseFloat(data[0].lon);
+
+                // Appel à l'API OpenWeatherMap pour récupérer les données météorologiques
+                var apiKey = '5f7b36762eba8ed81566c46cd93b1ab9';
+                var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&appid=' + apiKey;
+
+                fetch(weatherApiUrl)
+                    .then(response => response.json())
+                    .then(weatherData => {
+                        // Récupération des données météorologiques
+                        var temperature = weatherData.main.temp;
+                        var windSpeed = weatherData.wind.speed;
+                        var rain = (weatherData.rain && weatherData.rain['1h']) ? weatherData.rain['1h'] : 0;
+
+                        // Affichage des données météorologiques dans la popup du marqueur
+                        var popupContent = 'Latitude: ' + lat + '<br>Longitude: ' + lon +
+                            '<br>Temperature: ' + temperature + '°C' +
+                            '<br>Wind Speed: ' + windSpeed + ' m/s' +
+                            '<br>Rain: ' + rain + ' mm/h';
+
+                        // Ajouter un marqueur à la localisation trouvée
+                        L.marker([lat, lon]).addTo(map)
+                            .bindPopup('Location: ' + address + '<br>' + popupContent)
+                            .openPopup();
+
+                        // Centrer la carte sur la localisation trouvée
+                        map.setView([lat, lon], 13);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather data:', error);
+                        alert('Error fetching weather data.');
+                    });
+            } else {
+                alert('Location not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching location:', error);
+            alert('Error fetching location.');
+        });
+}
+
+
+</script>
+{% endblock %}
+
+<!-- Formulaire pour saisir une localisation -->
+<div class="location-form">
+    <input type="text" id="locationInput" placeholder="Enter location">
+    <button onclick="searchLocation()">Search</button>
+</div>
+
+</body>
+</html>
+{% endblock %}

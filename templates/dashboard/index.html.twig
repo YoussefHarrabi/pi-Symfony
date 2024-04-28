@@ -1,0 +1,15 @@
+{# templates/dashboard/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Tableau de bord</h1>
+    <div>
+        <a href="{{ path('/capteurs/Affiche') }}" class="btn btn-primary">Gestion des Capteurs</a>
+        <a href="{{ path('/donnees/afficheDonnees') }}" class="btn btn-primary">Gestion des Données Historiques</a>
+    </div>
+</div>
+{% endblock %}

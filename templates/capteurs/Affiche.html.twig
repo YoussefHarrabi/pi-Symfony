@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Capteurs{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-default">
+        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+            <h2>Liste des capteurs</h2>
+            <img src="{{ asset('images/Capteur.png') }}" alt="Capteur" style="width: 100px; height: auto;">
+        </div>
+
+        <div class="card-body">
+            <div class="basic-data-table">
+                <table id="basic-data-table" class="table nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Date Installation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for capteur in capteurs %}
+                            <tr>
+                                <td>{{ capteur.id }}</td>
+                                <td>{{ capteur.nom }}</td>
+                                <td>{{ capteur.type }}</td>
+                                <td>{{ capteur.latitude }}</td>
+                                <td>{{ capteur.longitude }}</td>
+                                <td>{{ capteur.dateInstallation}}</td>
+                                <td>
+                                    <a href="{{ path('app_modifierCapteur', {'id': capteur.id}) }}" class="btn btn-primary btn-sm">Update</a>
+                                    <a href="{{ path('app_supprimerCapteur', {'id': capteur.id}) }} "class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base2.html.twig' %}
+
+{% block content %}
+    <canvas id="myChart" width="800" height="400"></canvas>
+
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Récupérer les statistiques fournies par le contrôleur Symfony
+            const statsByHour = {{ statsByHour|json_encode|raw }};
+            
+            // Extraire les heures et les compteurs des statistiques
+            const hours = Object.keys(statsByHour);
+            const counts = Object.values(statsByHour);
+
+            // Créer un graphique en utilisant Chart.js
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line', // Utiliser un graphique de type courbe
+                data: {
+                    labels: hours,
+                    datasets: [
+                        {
+                            label: 'Traffic level',
+                            data: counts,
+                            borderColor: 'blue',
+                            backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent
+                        }
+                    ]
+                },
+                options: {
+                    responsive: false, // Désactiver la réactivité
+                    plugins: {
+                        legend: {
+                            display: false, // Ne pas afficher la légende
+                        },
+                        title: {
+                            display: false, // Ne pas afficher le titre
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour', // Nom de l'axe des x
+                                color: 'white' // Couleur du texte de l'axe des x
+                            },
+                            grid: {
+                                color: 'yellow', // Couleur de la ligne de grille jaune
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Traffic level', // Nom de l'axe des y
+                                color: 'white' // Couleur du texte de l'axe des y
+                            },
+                            grid: {
+                                color: 'yellow', // Couleur de la ligne de grille jaune
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% endblock %}
