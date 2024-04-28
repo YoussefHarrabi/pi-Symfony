@@ -4,6 +4,7 @@
 
 Home:
     path: /Home
+<<<<<<< HEAD
     controller: App\Controller\HomeController::Home
 
 # Route pour afficher les capteurs
@@ -55,3 +56,6 @@ app_supprimerDonnees:
 
 
 
+=======
+    controller: App\Controller\HomeController::Home
+>>>>>>> 981a5f7f48281a6d0e08e59802f229618b213b8c
