@@ -1,0 +1,19 @@
+<h1>Register</h1>
+<style>
+    /* Error message styling */
+    .form-error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px; /* Adjust as needed */
+    }
+</style>
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+{{ form_row(form.nom) }}
+
+{{ form_row(form.prenom) }}
+{{ form_row(form.email) }}
+{{ form_row(form.motDePasse) }}
+{{ form_row(form.photoFile) }}
+{{ form_row(form.age) }}
+<button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Sign Up</button>
+{{ form_end(form) }}

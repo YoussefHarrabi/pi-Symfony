@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexCharts Doughnut Chart</title>
+    <!-- Include the ApexCharts library -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+   
+</head>
+
+<body>
+    <br>
+    <br>
+    <br>
+    <div class="col-xl-4 col-md-12">
+				
+        <!-- Doughnut Chart -->
+        <div class="card card-default">
+          <div class="card-header justify-content-center">
+                <div class="chart-container">
+                    <div class="chart-description">
+                        <p>This doughnut chart represents the distribution of users based on their age. It shows the number of users above and below 18 years old.</p>
+                    </div>
+                    <div id="apexcharts-doughnut" style="height: 300px; float: left;"></div>
+                    <div style="clear: both;"></div> <!-- Clear the float to ensure proper layout -->
+                </div>
+                
+                <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+                <script>
+                    // Data obtained from PHP function getUsersByAge
+                    var above18Users = {{ userStats.above_18 }};
+                    var below18Users = {{ userStats.below_18 }};
+                
+                    var options = {
+                        chart: {
+                            type: "donut",
+                            height: 300,
+                        },
+                        series: [above18Users, below18Users],
+                        labels: ["Above 18", "Below 18"],
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: "70%",
+                                },
+                            },
+                        },
+                        legend: {
+                            position: "bottom",
+                        },
+                    };
+                
+                    var chart = new ApexCharts(
+                        document.querySelector("#apexcharts-doughnut"),
+                        options
+                    );
+                
+                    chart.render();
+                </script>
+
+            </div>
+
+        </div>
+    </div>      
+    {% endblock %}

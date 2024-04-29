@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Moderna Bootstrap Template - Index</title>
+  <title>{% block title %}Moderna Bootstrap Template - Index{% endblock %}</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -57,7 +57,20 @@
           <li><a href="portfolio.html">Portfolio</a></li>
           <li><a href="team.html">Team</a></li>
           <li><a href="blog.html">Blog</a></li>
+          <li class="dropdown"><a href="#"><span>Account</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+                {% if app.user %}
+                    <li><a href="#" onclick="event.preventDefault(); document.getElementById('edit-profile-form').submit();">Edit Profile</a></li>
+                    <li><a>{{ app.user.username }}</a></li>
+                    <form id="edit-profile-form" action="" method="get" style="display: none;">
+                        {{ csrf_token('edit-profile') }}
+                    </form>
+                {% endif %}
+              </ul>
+
+          </li>
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+         
             <ul>
               <li><a href="#">Drop Down 1</a></li>
               <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
@@ -75,12 +88,23 @@
             </ul>
           </li>
           <li><a href="contact.html">Contact Us</a></li>
+          <form id="logout-form" action="{{ path('app_logout') }}" method="post" style="display: none;">
+            {{ csrf_token('logout') }}
+        </form>
+        <li class="dropdown">
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              <i class="mdi mdi-logout"></i> Log Out
+          </a>
+      </li>
         </ul>
+        
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
     </div>
   </header><!-- End Header -->
+
+  
 
   
 
@@ -94,7 +118,7 @@
       <!-- Slide 1 -->
       <div class="carousel-item active">
         <div class="carousel-container">
-          <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Moderna</span></h2>
+          <h2 class="animate__animated animate__fadeInDown"> <span>Moderna</span></h2>
           <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
           <a href="" class="btn-get-started animate__animated animate__fadeInUp">Read More</a>
         </div>

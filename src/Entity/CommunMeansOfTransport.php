@@ -2,19 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommunMeansOfTransportRepository;
 
 #[ORM\Entity(repositoryClass: CommunMeansOfTransportRepository::class)]
 class CommunMeansOfTransport
 {
-    #[Id]
-    #[GeneratedValue(strategy: "IDENTITY")]
-    #[Column(name: "Registration_number", type: "integer", nullable: false)]
-    private ?int $registrationNumber = null;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "id", type: "integer")]
+    private $id;
+    
 
     #[ORM\ManyToOne(targetEntity: Train::class)]
     #[ORM\JoinColumn(name: "train_id", referencedColumnName: "id")]

@@ -8,6 +8,13 @@
         <div class="card-header card-header-border-bottom d-flex justify-content-between">
             <h2>Liste des Utilisateurs</h2>
         </div>
+        <div class="card-body">
+            <!-- Display validation errors -->
+            {% for flashMessage in app.flashes('error') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
 
         <div class="card-body">
             <div class="basic-data-table">
@@ -32,8 +39,11 @@
                                 <td>{{ user.getAge() }}</td>
                                 <td>{{ user.getRole() }}</td>
                                 <td>
-                                    <a href="" class="btn btn-primary btn-sm">Update</a>
-                                    <a href="" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="#updateModal{{ user.getId() }}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateModal{{ user.getId() }}">Update</a>
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ user.getId() }}">
+                                        
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -43,4 +53,73 @@
         </div>
     </div>
 </div>
+<!-- Update Modal -->
+{% for user in users %}
+<!-- Modal -->
+<div class="modal fade" id="deleteModal{{ user.getId() }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <form action="{{ path('delete_user', {'id': user.getId()}) }}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateModal{{ user.getId() }}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Update Form -->
+                <form action="{{ path('update_user', {'id': user.getId()}) }}" method="POST">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ user.getNom() }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" value="{{ user.getPrenom() }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="text" class="form-control" id="email" name="email" value="{{ user.getEmail() }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="date" class="form-control" id="age" name="age" value="{{ user.getAge() ? user.getAge()|date('Y-m-d') : '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="ROLE_USER" {% if user.getRole() == 'ROLE_USER' %}selected{% endif %}>USER</option>
+                            <option value="ROLE_ADMIN" {% if user.getRole() == 'ROLE_ADMIN' %}selected{% endif %}>ADMIN</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
 {% endblock %}

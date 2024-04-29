@@ -3,35 +3,26 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use VictorPrdh\RecaptchaBundle\Form\ReCaptchaType;
 
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 class LoginFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('email', EmailType::class, [
-                'label' => 'Email',
-            ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-            ])
-            ->add('remember_me', CheckboxType::class, [
-                'label' => 'Remember Me',
-                'required' => false, // This makes the checkbox optional
-            ]);
-            
+        $builder->add('recaptcha', ReCaptchaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        // Set default options for the form
         $resolver->setDefaults([
-            // Configure your form options here
+            'email_value' => null, // Default email value
         ]);
-    }}
+    }
+}

@@ -26,26 +26,22 @@ class Utilisateurs implements UserInterface
 
     #[ORM\Column(name: "Nom", type: "string", length: 255, nullable: false)]
     #[Assert\NotBlank(message: 'Nom cannot be empty.')]
-    #[Assert\Length(max: 255, maxMessage: 'Nom cannot be longer than {{ limit }} characters.')]
-    private string $nom;
+    private  $nom;
 
 
     #[ORM\Column(name: "Prenom", type: "string", length: 255, nullable: false)]
     #[Assert\NotBlank(message: 'Prenom cannot be empty.')]
-    #[Assert\Length(max: 255, maxMessage: 'Prenom cannot be longer than {{ limit }} characters.')]
-    #[Assert\NotNull]
+
+
     
-    private string $prenom;
+    private  $prenom;
 
     #[ORM\Column(name: "Email", type: "string", length: 255, nullable: false)]
     #[Assert\NotBlank(message: 'Email cannot be empty.')]
-    #[Assert\Email(message: 'Invalid email format.')]
-    #[Assert\Length(max: 255, maxMessage: 'Email cannot be longer than {{ limit }} characters.')]
     #[Assert\Regex(
         pattern: '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
         message: 'Invalid email format.'
     )]
-    #[Assert\NotNull]
     private string $email;
 
     #[ORM\Column(name: "mot_de_passe", type: "string", length: 255, nullable: false)]
@@ -58,16 +54,12 @@ class Utilisateurs implements UserInterface
     private ?string $verificationCode;
 
     #[ORM\Column(name: "url", type: "string", length: 255, nullable: true)]
-    private ?string $url;
+    private  $url;
 
     
     #[ORM\Column(name: "age", type: "string", length: 255, nullable: true)]
     #[Assert\NotBlank(message: 'Age cannot be blank.')]
-    #[Assert\Type(type: 'string', message: 'Age must be a string.')]
-    #[Assert\Regex(
-        pattern: '/^\d{4}-\d{2}-\d{2}$/',
-        message: 'Invalid date format. Please use YYYY-MM-DD.'
-    )]
+   
     private ?string $age;
     /**
      * @Assert\Callback
@@ -98,7 +90,7 @@ class Utilisateurs implements UserInterface
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(?string $nom): static
     {
         $this->nom = $nom;
         return $this;
@@ -109,7 +101,7 @@ class Utilisateurs implements UserInterface
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setPrenom(?string $prenom): static
     {
         $this->prenom = $prenom;
         return $this;
@@ -120,7 +112,7 @@ class Utilisateurs implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
         return $this;
