@@ -6,7 +6,7 @@
     <h1>New Work</h1>
     
 
-    {# Display global form errors if any #}
+   {# Afficher les erreurs globales du formulaire s'il y en a #}
     {% if form_errors(form) %}
         <div class="alert alert-danger">
             <ul>
@@ -44,25 +44,35 @@
             </div>
         {% endif %}
     </div>
+   
 
-    <div class="form-group">
+     <div class="form-group">
         {{ form_label(form.enddate) }}
         {{ form_widget(form.enddate, {'attr': {'class': 'form-control'}}) }}
         {% if form_errors(form.enddate) %}
             <div class="alert alert-danger">
-                {% for error in form_errors(form.enddate) %}
-                    <span>{{ error.message }}</span><br>
-                {% endfor %}
+                 <p style="color: red;">{{ form_errors(form.enddate) }}</p>
             </div>
         {% endif %}
     </div>
-
+    
     <div class="form-group">
         {{ form_label(form.description) }}
         {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
         {% if form_errors(form.description) %}
             <div class="alert alert-danger">
                 {% for error in form_errors(form.description) %}
+                    <span>{{ error.message }}</span><br>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+     <div class="form-group">
+        {{ form_label(form.image) }} {# Ajouter le label pour le champ image #}
+        {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }} {# Afficher le champ image avec les attributs de classe #}
+        {% if form_errors(form.image) %}
+            <div class="alert alert-danger">
+                {% for error in form_errors(form.image) %}
                     <span>{{ error.message }}</span><br>
                 {% endfor %}
             </div>
@@ -84,4 +94,24 @@
     <button type="submit" class="btn btn-primary">Create</button>
 
     {{ form_end(form) }}
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.autocomplete-location').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: '{{ path('autocomplete_location') }}',
+                        dataType: 'json',
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 1 // Nombre de caractères minimum pour déclencher l'autocomplétion
+            });
+        });
+    </script>
 {% endblock %}

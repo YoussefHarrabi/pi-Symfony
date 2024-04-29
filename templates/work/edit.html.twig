@@ -1,0 +1,15 @@
+{# templates/work/edit.html.twig #}
+
+
+    <h1>Edit Work</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.location) }}
+    {{ form_row(form.startdate) }}
+    {{ form_row(form.enddate) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.image) }}
+    {{ form_row(form.isactive) }}
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    {{ form_end(form) }}

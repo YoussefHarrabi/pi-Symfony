@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+    <h1>Search Results</h1>
+
+    <div>
+
+    {% if works is not empty %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Work ID</th>
+                    <th>Location</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Description</th>
+                    <th>Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work in works %}
+                    <tr>
+                        <td>{{ work.getWorkid() }}</td>
+                        <td>{{ work.getLocation() }}</td>
+                        <td>{{ work.getStartdate() ? work.getStartdate()|date('Y-m-d') : '' }}</td>
+                        <td>{{ work.getEnddate() ? work.getEnddate()|date('Y-m-d') : '' }}</td>
+                        <td>{{ work.getDescription() }}</td>
+                        <td>{{ work.isIsactive() ? 'Yes' : 'No' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No works found matching the location criteria.</p>
+    {% endif %}
+    </div>
+    {# Lien pour retourner à la liste des works #}
+    <a href="{{ path('app_work') }}" class="btn btn-primary">Back to Works List</a>
+{% endblock %}

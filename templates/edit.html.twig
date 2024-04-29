@@ -5,29 +5,35 @@
 {% block content %}
     <h1>Update Work</h1>
 
-    <form action="{{ path('work_update', {'id': work.getWorkid()}) }}" method="POST">
+ {{ form_start(form) }}
         <div class="form-group">
             <label for="location">Location:</label>
-            <input type="text" id="location" name="location" class="form-control" value="{{ work.getLocation() }}" required>
+              {{ form_row(form.location, {'attr': {'class': 'form-control'}}) }}
+           
         </div>
         <div class="form-group">
             <label for="startdate">Start Date:</label>
-            <input type="date" id="startdate" name="startdate" class="form-control" value="{{ work.getStartdate()|date('Y-m-d') }}" required>
+           {{ form_row(form.startdate, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="form-group">
             <label for="enddate">End Date:</label>
-            <input type="date" id="enddate" name="enddate" class="form-control" value="{{ work.getEnddate()|date('Y-m-d') }}">
+           {{ form_row(form.enddate, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea id="description" name="description" class="form-control">{{ work.getDescription() }}</textarea>
+            {{ form_row(form.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            <label for="image">Image:</label>
+{{ form_row(form.image, {'attr': {'class': 'form-control'}}) }}
+    
         </div>
         <div class="form-group">
             <div class="form-check">
-                <input type="checkbox" id="isactive" name="isactive" class="form-check-input" {% if work.isIsactive() %}checked{% endif %}>
+                {{ form_row(form.isactive, {'attr': {'class': 'form-check-input'}}) }}
                 <label class="form-check-label" for="isactive">isActive</label>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+    {{ form_end(form) }}
 {% endblock %}

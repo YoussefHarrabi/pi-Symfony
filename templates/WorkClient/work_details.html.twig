@@ -1,0 +1,15 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Work Details{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>{{ work.location }}</h1>
+                <p>{{ work.description }}</p>
+                <p>{{ work.startDate|date('Y-m-d') }} - {{ work.endDate|date('Y-m-d') }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

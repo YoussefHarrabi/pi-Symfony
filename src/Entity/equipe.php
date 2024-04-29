@@ -24,10 +24,12 @@ class Equipe
 
     #[ORM\Column(name: "nbrPersonne", type: "integer", length: 255, nullable: true)]
     private?int $nbrPersonne;
+   
 
     #[ORM\ManyToOne(targetEntity: Work::class)]
     #[ORM\JoinColumn(name: "work_id", referencedColumnName: "workID")]
     private $work;
+    
 
     public function getId(): ?int
     {
@@ -45,6 +47,20 @@ class Equipe
 
         return $this;
     }
+   
+    public function getWork(): ?Work
+    {
+        return $this->work;
+    }
+
+    public function setWork(?Work $work): self
+    {
+        $this->work = $work;
+
+        return $this;
+    }
+
+   
 
     public function getNbrPersonne(): ?int
     {
@@ -58,15 +74,6 @@ class Equipe
         return $this;
     }
 
-    public function getWork(): ?Work
-    {
-        return $this->work;
-    }
+    
 
-    public function setWork(?Work $work): self
-    {
-        $this->work = $work;
-
-        return $this;
-    }
 }

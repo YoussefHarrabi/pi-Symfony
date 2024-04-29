@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Work;
+use \App\Entity\Work;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -10,8 +10,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
 
 
 class AjoutFormType extends AbstractType
@@ -20,12 +23,10 @@ class AjoutFormType extends AbstractType
     {
         $builder
             ->add('location', TextType::class, [
+                'label' => 'Location',
                 'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez saisir la localisation.'
-                    ]),
-                    new Assert\Length(['max' => 255]),
+                'attr' => [
+                    'class' => 'autocomplete-location', // Ajouter une classe pour cibler le champ avec JavaScript
                 ],
             ])
             ->add('startdate', DateType::class, [
@@ -37,16 +38,25 @@ class AjoutFormType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
 
+
+
             ])
             ->add('description', TextareaType::class, [
+                'label' => 'Description',
                 'required' => true,
+
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'required' => true,
+                'mapped' => false, // Set mapped to false
                 'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez saisir une description.'
+                    new NotBlank([
+                        'message' => 'Please upload an image file',
                     ]),
-                    new Assert\Length(['max' => 65535]),
                 ],
             ])
+
             ->add('isactive', CheckboxType::class, [
                 'required' => false,
             ])

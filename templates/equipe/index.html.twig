@@ -31,11 +31,31 @@
                             </td>
                             <td>
                                 <a href="{{ path('equipe_edit', {'id': equipe.getId()}) }}" class="btn btn-primary">Update</a>
-                                <a href="{{ path('equipe_delete', {'id': equipe.getId()}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')">Delete</a>
+                               
+                   <form id="deleteForm" action="{{ path('equipe_delete', {'id': equipe.getId()}) }}" method="POST">
+    {# CSRF token for Symfony form submission #}
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.getId()) }}">
+
+    {# Method override for DELETE request #}
+    <input type="hidden" name="_method" value="DELETE">
+
+    <button type="submit" class="btn btn-danger" onclick="return confirmDelete();">Delete</button>
+</form>
+
+<script>
+    function confirmDelete() {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')) {
+            // If user confirms, submit the form
+            document.getElementById('deleteForm').submit();
+        }
+        // If user cancels, prevent the form submission
+        return false;
+    }
+</script>
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
+                </tbody>    
             </table>
         </div>
     </div>
