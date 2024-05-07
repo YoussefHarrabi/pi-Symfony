@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Équipe Information{% endblock %}
+
+{% block content %}
+    <h1>Équipe Information</h1>
+    <div class="card-body">
+        <div class="basic-data-table">
+            <table id="basic-data-table" class="table nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Équipe ID</th>
+                        <th>Relation</th>
+                        <th>Nombre de personnes</th>
+                        <th>Travail associé</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipe in equipes %}
+                        <tr>
+                            <td>{{ equipe.getId() }}</td>
+                            <td>{{ equipe.getRelationTo() }}</td>
+                            <td>{{ equipe.getNbrPersonne() }}</td>
+                            <td>
+                                {% if equipe.getWork() is not null %}
+                                    {{ equipe.getWork().getLocation() }}
+                                {% else %}
+                                    Aucun travail associé
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('equipe_edit', {'id': equipe.getId()}) }}" class="btn btn-primary">Update</a>
+                            </td>
+                            <td>
+                   <form id="deleteForm" action="{{ path('equipe_delete', {'id': equipe.getId()}) }}" method="POST">
+    {# CSRF token for Symfony form submission #}
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.getId()) }}">
+
+    {# Method override for DELETE request #}
+    <input type="hidden" name="_method" value="DELETE">
+
+    <button type="submit" class="btn btn-danger" onclick="return confirmDelete();">Delete</button>
+</form>
+</td>
+<script>
+    function confirmDelete() {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette équipe ?')) {
+            // If user confirms, submit the form
+            document.getElementById('deleteForm').submit();
+        }
+        // If user cancels, prevent the form submission
+        return false;
+    }
+</script>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>    
+            </table>
+        </div>
+    </div>
+     {% if equipes.totalItemCount > equipes.getItemNumberPerPage() %}
+        <div class="pagination">
+            {{ knp_pagination_render(equipes) }}
+        </div>
+    {% endif %}
+
+    {# Bouton "Add" pour créer une nouvelle équipe #}
+    <div class="mt-3">
+        <a href="{{ path('equipe_add') }}" class="btn btn-success">Add</a>     
+        <a href="{{ path('app_work') }}" class="btn btn-primary">Retourner à la liste des travaux</a>
+
+    </div>
+    
+{% endblock %}

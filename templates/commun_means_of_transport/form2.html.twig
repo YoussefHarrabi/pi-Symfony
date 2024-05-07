@@ -1,0 +1,41 @@
+{% extends 'baseModerna.html.twig' %}
+
+{% block content %}
+<h1>Commun means of transport list</h1>
+ <img src="/assets2/img/logo.png" alt="Transport Logo" style="height: 50px;"/> <!-- Ajustez le nom de l'image -->
+<table id="basic-data-table" class="table nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Registration Number</th>
+            <th>Type</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+        {% for CommunMeansOfTransport in CommunMeansOfTransports %}
+        <tr>
+            <td>{{ CommunMeansOfTransport.registrationNumber }}</td>
+            <td>{{ CommunMeansOfTransport.type }}</td>
+           
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+   <a href="{{ path('CommunMeansOfTransport_pdf') }}" class="btn btn-primary">Export PDF</a> 
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

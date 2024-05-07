@@ -2,7 +2,68 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+
+
 HomeUser:
     path: /HomeUser
     controller: App\Controller\HomeController::HomeUser
+
+HomeUser_fr:
+    path: /accueil-utilisateur
+    defaults:
+        _locale: fr
+        _controller: 'App\Controller\HomeController::HomeUser'
+    
+rate_ride_page:
+    path: '/ride/{id}/rate'
+    controller: 'App\Controller\RideController::ratePage'
+
+
+# Route pour afficher les capteurs
+app_Affiche:
+    path: /capteurs/Affiche
+    controller: 'App\Controller\CapteursController::Affiche'
+    methods: ['GET']
+  
+app_afficheDonnees:
+    path: /donnees/afficheDonnees
+    controller: App\Controller\DonneesController::afficheDonnees
+
+app_ajouterCapteur:
+    path: /capteurs/ajouterCapteur
+    controller: App\Controller\CapteursController::ajouterCapteur
+    methods: ['GET', 'POST']
+
+app_modifierCapteur:
+    path: /capteurs/{id}/modifier
+    controller: App\Controller\CapteursController::modifierCapteur
+    methods: ['GET', 'POST']
+
+app_supprimerCapteur:
+    path: /capteurs/{id}/supprimer
+    controller: App\Controller\CapteursController::supprimerCapteur
+    methods: ['GET', 'POST']
+
+# Routes pour le contrôleur DonneesController
+app_donnees:
+    path: /donnees
+    controller: App\Controller\DonneesController::index
+    methods: ['GET']
+
+app_ajouterDonnees:
+    path: /donnees/ajouterDonnees
+    controller: App\Controller\DonneesController::ajouterDonnees
+    methods: ['GET', 'POST']
+
+app_modifierDonnees:
+    path: /donnees/modifierDonnees/{id}
+    controller: App\Controller\DonneesController::modifierDonnees
+    methods: ['GET', 'POST']
+
+app_supprimerDonnees:
+    path: /donnees/supprimerDonnees/{id}
+    controller: App\Controller\DonneesController::supprimerDonnees
+    methods: ['GET', 'POST']
+
+
 

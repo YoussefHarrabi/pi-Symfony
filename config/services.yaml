@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+  image_directory: "%kernel.project_dir%/public/uploads"
+  
 
 services:
     
@@ -20,9 +22,22 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+
+     # Add configuration for gregwar/captcha-bundle
+     
     App\EventSubscriber\LoginSuccessSubscriber:
             tags:
-                - { name: 'kernel.event_subscriber' }       
+                - { name: 'kernel.event_subscriber' }   
+                    
+    App\Service\twilioo:
+      arguments:
+        $sid: "%env(TWILIO_ACCOUNT_SID)%"
+        $token: "%env(TWILIO_AUTH_TOKEN)%"
+        $fromNumber: "+14157235158" # Replace with your Twilio phone number
+
+    
+            
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

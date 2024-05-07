@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Capteur - Sleek Admin Dashboard Template{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center vh-100">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-10">
+      <div class="card">
+        <div class="card-header bg-primary">
+          <div class="app-brand">
+            <a href="/index.html">
+              <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30" height="33"
+                viewBox="0 0 30 33">
+                <g fill="none" fill-rule="evenodd">
+                  <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
+                  <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
+                </g>
+              </svg>
+              <span class="brand-name">Sleek Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <img src="{{ asset('images/Capteur.png') }}" alt="Capteur" style="width: 100px; height: auto;">
+            <h4 class="text-dark">Ajouter un Capteur</h4>
+          </div>
+          <div id="errorModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Erreur</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p id="errorMessage"></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <form action="{{ path('app_ajouterCapteur') }}" method="post">
+            {{ form_start(f) }}
+            <div class="row">
+              <div class="form-group col-md-12 mb-4">
+                {{ form_label(f.nom) }}
+                {{ form_widget(f.nom, {'attr': {'class': 'form-control input-lg'}}) }}
+              </div>
+              <div class="form-group col-md-12 mb-4">
+                {{ form_label(f.type) }}
+                {{ form_widget(f.type, {'attr': {'class': 'form-control input-lg'}}) }}
+              </div>
+              <div class="form-group col-md-12 mb-4">
+                {{ form_label(f.latitude) }}
+                {{ form_widget(f.latitude, {'attr': {'class': 'form-control input-lg'}}) }}
+              </div>
+              <div class="form-group col-md-12 mb-4">
+                {{ form_label(f.longitude) }}
+                {{ form_widget(f.longitude, {'attr': {'class': 'form-control input-lg'}}) }}
+              </div>
+              <div class="form-group col-md-12 mb-4">
+                {{ form_label(f.dateInstallation) }}
+                {{ form_widget(f.dateInstallation, {'attr': {'class': 'form-control input-lg'}}) }}
+              </div>
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Ajouter</button>
+              </div>
+            </div>
+            {{ form_end(f) }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+  // Afficher la fenêtre modale avec le message d'erreur
+  {% if erreur %}
+    $('#errorMessage').text('Ce nom de capteur est déjà utilisé. Veuillez choisir un autre nom.');
+    $('#errorModal').modal('show');
+  {% endif %}
+</script>
+{% endblock %}

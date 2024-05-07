@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Capteurs{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card card-default">
+        <div class="card-header card-header-border-bottom">
+            <h2 class="float-left">Liste des capteurs</h2>
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <!-- Champ de recherche centré -->
+                <form method="get" action="{{ path('app_Affiche') }}" class="form-inline mx-auto">
+                    <input type="text" name="search" class="form-control mr-2" placeholder="Recherche par type" value="{{ app.request.query.get('search') }}">
+                    <button type="submit" class="btn btn-primary btn-sm">Rechercher</button>
+                </form>
+                <!-- Bouton d'ajout à droite -->
+                <a href="{{ path('app_ajouterCapteur') }}" class="btn btn-success btn-sm">Ajouter Capteur</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table nowrap">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Date Installation</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for capteur in pagination %}
+                            <tr>
+                                <td>{{ capteur.id }}</td>
+                                <td>{{ capteur.nom }}</td>
+                                <td>{{ capteur.type }}</td>
+                                <td>{{ capteur.latitude }}</td>
+                                <td>{{ capteur.longitude }}</td>
+                                <td>{{ capteur.dateInstallation|date('Y-m-d') }}</td>
+                                <td>
+                                    <a href="{{ path('app_modifierCapteur', {'id': capteur.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                    <a href="{{ path('app_supprimerCapteur', {'id': capteur.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

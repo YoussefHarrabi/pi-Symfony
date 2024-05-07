@@ -1,0 +1,83 @@
+
+{% extends 'baseModerna.html.twig' %}
+{% block content %}
+
+<div class="chat-wrapper">
+    <div class="chat-header">
+        <h1>ChatBot</h1>
+         <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .chat-wrapper {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .chat-body {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .message-bot {
+            background-color: #e9e9e9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .chat-input {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        #message {
+            width: calc(100% - 70px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        #submit-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    </div>
+    <div class="chat-body">
+        
+            
+            <div class="message-bot">
+                {# Display the response text #}
+                <p>{{ response }}</p>
+            </div>
+       
+    </div>
+    <form method="post" action="{{ path('app_chat_bot') }}">
+        <div class="chat-input">
+            <textarea id="message" name="message" placeholder="Type your message here..."></textarea>
+            <button id="submit-btn" type="submit">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

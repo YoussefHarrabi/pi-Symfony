@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h1>Commun means of transport list</h1>
+<table id="basic-data-table" class="table nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Registration Number</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for CommunMeansOfTransport in CommunMeansOfTransports %}
+        <tr>
+            <td>{{ CommunMeansOfTransport.registrationNumber }}</td>
+            <td>{{ CommunMeansOfTransport.type }}</td>
+            <td>
+                <a href ="{{ path('CommunMeansOfTransport_update', {'id': CommunMeansOfTransport.id}) }}" class="btn btn-primary">Update</a> 
+                <a href ="{{ path('CommunMeansOfTransport_delete', {'id': CommunMeansOfTransport.id}) }}" class="btn btn-primary">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+  <a href ="{{ path('CommunMeansOfTransport_add') }}" class="btn btn-primary">Add</a>
+  <a href="{{ path('CommunMeansOfTransport_pdf') }}" class="btn btn-primary">Export PDF</a>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

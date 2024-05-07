@@ -21,6 +21,14 @@ class RideRepository extends ServiceEntityRepository
         parent::__construct($registry, Ride::class);
     }
 
+    public function countReportsPerDriver(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.driver, COUNT(r.reports) AS totalReports')
+            ->groupBy('r.driver')
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Ride[] Returns an array of Ride objects
 //     */

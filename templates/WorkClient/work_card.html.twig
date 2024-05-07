@@ -1,0 +1,54 @@
+<div class="card mb-4">
+    <img class="card-img-top" src="{{ asset('uploads/' ~ work.image) }}" alt="Work Image">
+    <div class="card-body">
+        <h5 class="card-title">{{ work.location }}</h5>
+        <p class="card-text">{{ work.description }}</p>
+        <!-- Button to trigger the modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#workModal{{ work.workID }}">
+            View Details
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="workModal{{ work.workID }}" tabindex="-1" aria-labelledby="workModalLabel{{ work.workID }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workModalLabel{{ work.workID }}">{{ work.location }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img class="card-img-top" src="{{ asset('uploads/' ~ work.image) }}" alt="Work Image">
+
+                    <!-- Add modal content here -->
+                    <p>{{ work.description }}</p>
+                   <p><strong>Date de début :</strong> {{ work.getStartdate() ? work.getStartdate()|date('Y-m-d') : 'Non définie' }}</p>
+                   <p><strong>Date de fin :</strong> {{ work.getEnddate() ? work.getEnddate()|date('Y-m-d') : 'Non définie' }}</p>
+                   <p><strong>Durée du travail :</strong> {{ work.duration is not null ? work.duration ~ ' jour(s)' : 'Non définie' }}</p>
+
+                </div>
+                <div class="modal-footer">
+<form id="send_sms_form" action="{{ path('send_sms') }}" method="POST" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('send_sms') }}">
+    <input type="hidden" name="workLocation" value="{{ work.location }}">
+    <input type="hidden" name="workDescription" value="{{ work.description }}">
+    <input type="hidden" name="workStartDate" value="{{ work.getStartDate() ? work.getStartDate()|date('Y-m-d') : '' }}">
+    <input type="hidden" name="workEndDate" value="{{ work.getEndDate() ? work.getEndDate()|date('Y-m-d') : '' }}">
+    <input type="hidden" name="workDuration" value="{{ work.duration }}">
+    
+    <button type="submit" class="btn btn-danger">receveSMS</button>
+</form>
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                                    
+                                <form action="{{ path('save_location') }}" method="post">
+    <!-- Vos champs de formulaire ici -->
+    <button type="submit" class="btn btn-warning btn-sm">geo</button>
+</form>
+  
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

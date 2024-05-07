@@ -20,7 +20,15 @@ class WorkRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Work::class);
     }
-
+// Méthode pour rechercher les travaux par localisation commençant par un mot-clé
+public function findByLocationStartingWith(string $keyword)
+{
+    return $this->createQueryBuilder('w')
+        ->where('w.location LIKE :keyword')
+        ->setParameter('keyword', $keyword . '%') // Le mot-clé doit commencer par la valeur fournie
+        ->getQuery()
+        ->getResult();
+}
 //    /**
 //     * @return Work[] Returns an array of Work objects
 //     */

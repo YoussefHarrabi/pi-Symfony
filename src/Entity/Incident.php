@@ -2,32 +2,49 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: App\Repository\IncidentRepository::class)]
-#[ORM\Table(name: "incident")]
+
+#[ORM\Entity(repositoryClass:"App\Repository\IncidentRepository"::class)]
 class Incident
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
-    #[ORM\Column(name: "IncidentId", type: "integer", nullable: false)]
-    private ?int $incidentId = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: "IncidentId", type: "integer")]
+    private ?int $IncidentId;
 
-    #[ORM\Column(name: "Type", type: "string", length: 255, nullable: true)]
-    private ?string $type = null;
+    #[Assert\NotBlank(message: "Incident type must not be empty")]
+    #[ORM\Column(name: "Type", type: "string", length: 255)]
+    private ?string $type;
 
-    #[ORM\Column(name: "Place", type: "string", length: 255, nullable: true)]
-    private ?string $place = null;
+    #[Assert\NotBlank(message: "Incident place must not be empty")]
+    #[ORM\Column(name: "Place", type: "string", length: 255)]
+    private ?string $place;
 
-    #[ORM\Column(name: "Hour", type: "datetime", nullable: true)]
-    private ?\DateTimeInterface $hour = null;
+    #[Assert\NotNull(message: "Incident hour must not be null")]
+    #[Assert\Regex(
+        pattern: "/^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/",
+        message: "Hour must be in the format HH:mm:ss or HH:mm"
+    )]
+    #[Assert\LessThanOrEqual("now", message: "Hour cannot be in the future")]
+    #[ORM\Column(name: "hour", type: "string", length: 8)]
+    private ?string $hour;
 
-    #[ORM\Column(name: "Description", type: "text", length: 65535, nullable: true)]
-    private ?string $description = null;
+    #[Assert\NotBlank(message: "Description must not be empty")]
+    #[ORM\Column(name: "Description", type: "string", length: 350)]
+    private ?string $description;
 
-    public function getIncidentId(): ?int
+    #[ORM\Column(name: "userID", type: "integer")]
+    private ?int $userid;
+
+    #[ORM\Column(name: "Date", type: "date", options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeInterface $date;
+
+    public function getIncidentid(): ?int
     {
-        return $this->incidentId;
+        return $this->IncidentId;
     }
 
     public function getType(): ?string
@@ -56,15 +73,30 @@ class Incident
 
     public function getHour(): ?\DateTimeInterface
     {
-        return $this->hour;
+        if ($this->hour === null) {
+            return null;
+        }
+    
+        // Assuming $this->hour is in the format 'HH:mm:ss'
+        return \DateTime::createFromFormat('H:i:s', $this->hour);
     }
 
     public function setHour(?\DateTimeInterface $hour): static
-    {
+{
+    if ($hour instanceof \DateTimeInterface) {
+        $this->hour = $hour->format('H:i:s'); // Convert DateTime object to string
+    } elseif (is_string($hour)) {
+        // Validate the string format if needed before setting it
+        // Assuming the string format is valid
         $this->hour = $hour;
-
-        return $this;
+    } else {
+        // Handle other cases as needed, such as setting it to null
+        $this->hour = null;
     }
+
+    return $this;
+}
+
 
     public function getDescription(): ?string
     {
@@ -77,4 +109,40 @@ class Incident
 
         return $this;
     }
+
+    public function getUserid(): ?int
+    {
+        return $this->userid;
+    }
+
+    public function setUserid(?int $userid): static
+    {
+        $this->userid = $userid;
+
+        return $this;
+    }
+
+   public function getDate(): ?string
+{
+    if ($this->date instanceof \DateTimeInterface) {
+        // Formater la date en chaîne de caractères
+        return $this->date->format('Y-m-d');
+    } elseif (is_string($this->date)) {
+        // Si la date est déjà une chaîne, la retourner
+        return $this->date;
+    } else {
+        // Sinon, retourner null
+        return null;
+    }
+}
+public function setDate(?\DateTimeInterface $date): static
+{
+    $this->date = $date;
+
+    return $this;
+}
+ 
+
+    
+
 }

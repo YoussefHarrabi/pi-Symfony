@@ -1,0 +1,188 @@
+{% extends 'baseModerna.html.twig' %}
+
+{% block title %}Request a Ride{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Custom styling for form */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f8f9fa; /* Light background color */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-family: 'Arial', sans-serif; /* Clear and readable font */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Decrease margin for better spacing */
+        }
+
+        .form-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px; /* Decrease padding for better alignment */
+            border: 1px solid #ced4da; /* Light border color */
+            border-radius: 6px;
+            font-size: 16px;
+            color: #495057;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #80bdff; /* Focus border color */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-errors {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .form-submit {
+            text-align: center;
+        }
+
+        .form-submit button {
+            padding: 12px 40px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-submit button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<style>
+        /* Custom styling for form */
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f8f9fa; /* Light background color */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-family: 'Arial', sans-serif; /* Clear and readable font */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Decrease margin for better spacing */
+        }
+
+        .form-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px; /* Decrease padding for better alignment */
+            border: 1px solid #ced4da; /* Light border color */
+            border-radius: 6px;
+            font-size: 16px;
+            color: #495057;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #80bdff; /* Focus border color */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-errors {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .form-submit {
+            text-align: center;
+        }
+
+        .form-submit button {
+            padding: 12px 40px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-submit button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <div class="form-container">
+        <h2>Request a Ride</h2>
+        {{ form_start(formA,{'attr':{'novalidate': 'novalidate'}}) }}
+       
+
+        <div class="form-group">
+            {{ form_label(formA.startLocation, "Start Location:", {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formA.startLocation, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(formA.endLocation, "End Location:", {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formA.endLocation, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(formA.departureTime, "Departure Time:", {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formA.departureTime, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(formA.numberSeats, "Number of Seats Wanted:", {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formA.numberSeats, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(formA.mail, "Your E-mail:", {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formA.mail, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="form-submit">
+            <button type="submit">Submit</button>
+        </div>
+
+        {{ form_end(formA) }}
+    </div>
+{% endblock %}

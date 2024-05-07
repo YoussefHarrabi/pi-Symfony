@@ -1,0 +1,48 @@
+{# rate.html.twig #}
+{% extends 'baseModerna.html.twig' %}
+
+{% block title %}Rate Ride{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Rate Ride</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center">Rate the ride with ID: {{ ride.id }}</p>
+                        <form action="{{ path('ride_rate', {'id': ride.id}) }}" method="post">
+                            <div class="form-group">
+                                <label for="rating" class="font-weight-bold">Rating:</label>
+                                <select id="rating" name="rating" class="form-control" required>
+                                    <option value="">Select Rating</option>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="3">3 - Average</option>
+                                    <option value="4">4 - Good</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report" class="font-weight-bold">Report:</label>
+                                <select id="report" name="report" class="form-control" required>
+                                    <option value="">Select Report</option>
+                                    <option value="Late Arrival">Late Arrival ⏰</option>
+                                    <option value="Poor Driving">Poor Driving 🚗</option>
+                                    <option value="Unsafe Vehicle">Unsafe Vehicle ⚠️</option>
+                                    <option value="Cancellation">Cancellation ❌</option>
+                                    <!-- Add more predefined reports here -->
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit Rating and Report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

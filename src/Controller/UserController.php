@@ -10,6 +10,8 @@ use App\Form\UserRegistrationFormType;
 use App\Form\ResetPasswordFormType;
 use App\Form\LoginFormType;
 use App\Form\verifcode;
+
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\LogicException;
@@ -20,7 +22,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-
+use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 class UserController extends AbstractController
@@ -692,7 +695,7 @@ public function resetPassword(Request $request, UserPasswordEncoderInterface $pa
     ];
 }
 
-#[Route('/stat', name: 'stats')]
+#[Route('/statis', name: 'stats')]
 public function showStats(Request $request): Response
 {
     $entityManager = $this->getDoctrine()->getManager();

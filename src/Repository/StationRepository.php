@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Station;
@@ -45,4 +44,28 @@ class StationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+
+public function findBySearchCriteriaAndSort(?string $searchTerm, string $sortField = 'id', string $sortOrder = 'ASC'): array
+{
+    $qb = $this->createQueryBuilder('s'); // 's' est l'alias pour 'station'
+
+    // Ajouter le critère de recherche
+    if (!empty($searchTerm)) {
+        $qb->where('s.name LIKE :term OR s.address LIKE :term')
+           ->setParameter('term', '%' . $searchTerm . '%');
+    }
+
+    // Ajouter le critère de tri
+    if ($sortField && in_array($sortField, ['id', 'name', 'address'])) {
+        $qb->orderBy('s.' . $sortField, $sortOrder);
+    }
+
+    return $qb->getQuery()->getResult(); // Renvoyer les résultats
 }
+
+
+
+}
+

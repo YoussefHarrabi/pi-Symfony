@@ -1,0 +1,52 @@
+{% extends 'baseModerna.html.twig' %}
+{% block title %}Rides Form{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="my-4 text-center">Add Ride</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                {{ form_start(formA, {'attr': {'novalidate': 'novalidate'}}) }}
+                
+                {% if errors is not empty %}
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> Please fix the following issues:
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <div class="form-group">
+                    {{ form_label(formA.driver, "Driver's Name") }}
+                    {{ form_widget(formA.driver, {'attr': {'class': 'form-control', 'placeholder': 'Enter driver\'s name'}}) }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(formA.startLocation, "Start Location") }}
+                    {{ form_widget(formA.startLocation, {'attr': {'class': 'form-control', 'placeholder': 'Enter start location'}}) }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(formA.endLocation, "End Location") }}
+                    {{ form_widget(formA.endLocation, {'attr': {'class': 'form-control', 'placeholder': 'Enter end location'}}) }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(formA.departureTime, "Departure Time") }}
+                    {{ form_widget(formA.departureTime, {'attr': {'class': 'form-control', 'placeholder': 'Enter departure time'}}) }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(formA.availableSeats, "Number of Seats Available") }}
+                    {{ form_widget(formA.availableSeats, {'attr': {'class': 'form-control', 'placeholder': 'Enter number of seats available'}}) }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Ride</button>
+                
+                {{ form_end(formA) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

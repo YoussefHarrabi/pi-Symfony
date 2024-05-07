@@ -1,10 +1,11 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: App\Repository\RequestRideRepository::class)]
+
+
 
 class RequestRide
 {
@@ -14,17 +15,27 @@ class RequestRide
     private $id;
 
     #[ORM\Column(name: "number_seats", type: "integer", nullable: true)]
+    #[Assert\PositiveOrZero(message: "number of seats wanted must be a positive number or zero")]
+    #[Assert\NotNull(message: "number of seats' field cannot be empty")]
+
     private $numberSeats;
 
     #[ORM\Column(name: "departureTime", type: "datetime", nullable: true)]
+    #[Assert\GreaterThan("now", message: "Departure time must be valid")]
+    #[Assert\NotNull(message: "departure time's field cannot be empty")]
+
     private $departuretime;
 
-    #[ORM\ManyToOne(targetEntity: Location::class)]
-    #[ORM\JoinColumn(name: "startLocation", referencedColumnName: "id")]
+    #[ORM\Column(name: "startLocation", type: "string", nullable: true)]
+    #[Assert\NotNull(message: "Start location's field cannot be empty")]
     private $startlocation;
+    #[ORM\Column(name: "mail", type: "string", nullable: true)]
+    #[Assert\NotNull(message: "E-mail's field cannot be empty")]
+    private $mail;
 
-    #[ORM\ManyToOne(targetEntity: Location::class)]
-    #[ORM\JoinColumn(name: "endLocation", referencedColumnName: "id")]
+    #[ORM\Column(name: "endLocation", type: "string", nullable: true)]
+    #[Assert\NotNull(message: "End location's field cannot be empty")]
+    #[Assert\NotEqualTo(propertyPath: "startlocation", message: "End location must be different from start location")]
     private $endlocation;
 
     public function getId(): ?int
@@ -56,26 +67,37 @@ class RequestRide
         return $this;
     }
 
-    public function getStartlocation(): ?Location
+    public function getStartlocation(): ?string
     {
         return $this->startlocation;
     }
 
-    public function setStartlocation(?Location $startlocation): static
+    public function setStartlocation(?string $startlocation): static
     {
         $this->startlocation = $startlocation;
 
         return $this;
     }
 
-    public function getEndlocation(): ?Location
+    public function getEndlocation(): ?string
     {
         return $this->endlocation;
     }
 
-    public function setEndlocation(?Location $endlocation): static
+    public function setEndlocation(?string $endlocation): static
     {
         $this->endlocation = $endlocation;
+
+        return $this;
+    }
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+
+    public function setMail(?string $mail): static
+    {
+        $this->mail = $mail;
 
         return $this;
     }

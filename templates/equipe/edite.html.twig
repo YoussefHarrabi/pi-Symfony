@@ -1,0 +1,26 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Équipe{% endblock %}
+
+{% block content %}
+    <h1>Modifier Équipe</h1>
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.relationTo, 'Relation') }}
+        {{ form_widget(form.relationTo, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.relationTo) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.nbrPersonne, 'Nombre de personnes') }}
+        {{ form_widget(form.nbrPersonne, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.nbrPersonne) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.work, 'Travail associé') }}
+        {{ form_widget(form.work, { 'attr': {'class': 'form-control'} }) }}
+        {{ form_errors(form.work) }}
+    </div>
+   
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'baseModerna.html.twig' %}
+
+{% block title %}Injury index{% endblock %}
+
+{% block content %}
+ <section class="services">
+    <div class="container">
+        <!-- Search input and Create new button -->
+        <h1 style="text-align:center">Injuries</h1>
+       <div class="d-flex justify-content-between align-items-center mb-3">
+            <button type="button" onclick="location.href='{{ path('app_injury_new') }}'"  class="btn btn-primary">ADD</button>
+        </div>
+       <form method="get" action="{{ path('app_injury_index') }}" class="form-inline justify-content-center mb-3">
+    <div class="form-group mb-2 mr-sm-2">
+        <input type="text" name="search" class="form-control" placeholder="Search by type" value="{{ app.request.query.get('search') }}">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Search</button>
+</form>
+        <div class="row">
+            {% set colors = ['pink', 'cyan', 'green', 'blue'] %}
+            {% set colorIndex = 0 %}
+            {% for injury in injuries %}
+            <div class="col-md-6 col-lg-3 d-flex align-items-stretch card-container" data-title="{{ injury.type|lower }}">
+                {% set colorClass = colors[colorIndex] %}
+                {% set colorIndex = (colorIndex + 1) % colors|length %}
+                <div class="icon-box icon-box-{{ colorClass }}">
+                    <div class="icon"><i class="mdi--account-injury"></i></div>
+                    <h4>{{ injury.type }}</h4>
+                    
+                    <p class="card-text">Incident: {{ injury.incident.type }}</p>
+                    <p class="card-text">Number of Persons: {{ injury.numberPers }}</p>
+                    <p class="card-text">Severity: {{ injury.severity }}</p>
+                    <br>
+                    <div style="display: inline-block;">
+                        <a href="{{ path('app_injury_edit', {'id': injury.id}) }}"><i class="bx bx-edit bx-sm" style="color: green;"></i></a>&nbsp;
+                    </div>
+                    <div style="display: inline-block;">
+                        <form action="{{ path('app_injury_delete', {'id': injury.id}) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this injury?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ injury.id) }}">
+                            <button type="submit" class="btn" style="color: red;"><i class="bx bx-trash bx-sm"></i></button>
+                        </form>
+                    </div>
+                    <div style="display: inline-block;">
+                        <a href="{{ path('app_injury_show', {'id': injury.id}) }}"><i class="bx bx-info-circle bx-sm"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        {{knp_pagination_render(injuries)}}
+    </div>
+        
+
+</section>
+<style>
+.mdi--account-injury {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M8 6c0-2.21 1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4s-4-1.79-4-4m9 16h1c1.1 0 2-.9 2-2v-4.78c0-1.12-.61-2.15-1.61-2.66c-.43-.22-.89-.43-1.39-.62zm-4.66-5L15 11.33c-.93-.21-1.93-.33-3-.33c-2.53 0-4.71.7-6.39 1.56A2.97 2.97 0 0 0 4 15.22V22h2.34c-.22-.45-.34-.96-.34-1.5C6 18.57 7.57 17 9.5 17zM10 22l1.41-3H9.5c-.83 0-1.5.67-1.5 1.5S8.67 22 9.5 22z'/%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+</style>
+
+<script>
+    // Function to filter injury cards based on search input
+    function filterInjuries() {
+        const searchInput = document.getElementById('searchInput');
+        const searchValue = searchInput.value.trim().toLowerCase();
+        const cardContainers = document.querySelectorAll('.card-container');
+
+        cardContainers.forEach(container => {
+            const title = container.dataset.title.toLowerCase();
+            const card = container.closest('.col-md-6');
+
+            if (title.includes(searchValue)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Add event listener for input change
+    document.getElementById('searchInput').addEventListener('input', filterInjuries);
+</script>
+{% endblock %}

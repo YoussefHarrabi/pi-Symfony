@@ -1,0 +1,51 @@
+{% extends 'baseModerna.html.twig' %}
+
+{% block title %}Edit Incident{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <div class="d-inline-block p-4 border rounded" style="width: 600px;">
+        <h3>Edit Incident</h3>
+        <p>Fill in the data below.</p>
+        {{incident.incidentId}}
+        <form class="requires-validation" novalidate  method="post"  action="{{ path('app_incident_edit', {'id': incident.IncidentId}) }}"
+>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="form-group">
+                <label for="type">Type</label>
+                {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Type'}}) }}
+                {% if form_errors(form.type) %}
+                    <span class="text-danger">{{ form_errors(form.type) }}</span>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="place">Place</label>
+                {{ form_widget(form.place, {'attr': {'class': 'form-control', 'placeholder': 'Place'}}) }}
+                {% if form_errors(form.place) %}
+                    <span class="text-danger">{{ form_errors(form.place) }}</span>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="hour">Hour</label>
+                {{ form_widget(form.hour, {'attr': {'class': 'form-control', 'placeholder': 'Hour'}}) }}
+                {% if form_errors(form.hour) %}
+                    <span class="text-danger">{{ form_errors(form.hour) }}</span>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description'}}) }}
+                {% if form_errors(form.description) %}
+                    <span class="text-danger">{{ form_errors(form.description) }}</span>
+                {% endif %}
+            </div>
+           
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 10px;"><i class="fas fa-edit"></i> Edit</button>
+            </div>
+            {{ form_end(form) }}
+        </form>
+        <a href="{{ path('app_incident_index') }}" class="btn btn-link">Back to List</a>
+    </div>
+</div>
+{% endblock %}

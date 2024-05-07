@@ -20,7 +20,14 @@ class RequestRideRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, RequestRide::class);
     }
-
+    public function getStatisticsByStartLocation(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.startlocation, COUNT(r.id) as totalRequests')
+            ->groupBy('r.startlocation')
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return RequestRide[] Returns an array of RequestRide objects
 //     */

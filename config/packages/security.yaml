@@ -41,6 +41,12 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/Liste, roles: ROLE_ADMIN }
+        - { path: ^/HomeAdmin, roles: ROLE_ADMIN }
+        
+       
+
+     # Error handling configuration
+    access_denied_url: /HomeUser  
     encoders:
         App\Entity\Utilisateurs:
             algorithm: auto

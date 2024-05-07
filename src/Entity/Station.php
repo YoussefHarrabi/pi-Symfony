@@ -3,48 +3,62 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: App\Repository\StationRepository::class)]
 #[ORM\Table(name: "station")]
+
 class Station
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
-    #[ORM\Column(name: "station_id", type: "integer", nullable: false)]
-    private $stationId;
+    #[ORM\Column(name: "id", type: "integer", nullable: false)]
+    private $id;
 
-    #[ORM\Column(name: "station_name", type: "string", length: 255, nullable: false)]
-    private $stationName;
 
-    #[ORM\Column(name: "station_order", type: "integer", nullable: false)]
-    private $stationOrder;
 
-    public function getStationId(): ?int
+    #[Assert\NotBlank(message: "Please enter name")]
+    #[ORM\Column(name: "Name", type: "string", length: 255, nullable: false)]
+    private $name;
+
+
+
+    #[Assert\NotBlank(message: "Please enter address")]
+    #[ORM\Column(name: "Address", type: "string", nullable: true)]
+    private $address;
+
+    
+
+    public function getId(): ?int
     {
-        return $this->stationId;
+        return $this->id;
     }
 
-    public function getStationName(): ?string
+    public function getName(): ?string
     {
-        return $this->stationName;
+        return $this->name;
     }
 
-    public function setStationName(string $stationName): static
+    public function setName(string $name): static
     {
-        $this->stationName = $stationName;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getStationOrder(): ?int
+    public function getAddress(): ?string
     {
-        return $this->stationOrder;
+        return $this->address;
     }
 
-    public function setStationOrder(int $stationOrder): static
+    public function setAddress(?string $address): static
     {
-        $this->stationOrder = $stationOrder;
+        $this->address = $address;
 
         return $this;
     }
+
+
+
 }

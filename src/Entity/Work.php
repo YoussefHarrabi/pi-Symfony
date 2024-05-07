@@ -1,13 +1,20 @@
 <?php
 
 namespace App\Entity;
+use App\Repository\WorkRepository;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 #[ORM\Table(name: "work")]
-#[ORM\Entity(repositoryClass: App\Repository\WorkRepository::class)]
+#[ORM\Entity(repositoryClass: WorkRepository::class)]
 class Work
 {
+    
+       
+    
     #[ORM\Column(name: "workID", type: "integer", nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
@@ -15,6 +22,9 @@ class Work
 
     #[ORM\Column(name: "location", type: "string", length: 255, nullable: true)]
     private ?string $location;
+
+    #[ORM\Column(name: "image", type: "string", length: 255, nullable: true)]
+    private ?string $image;
 
     #[ORM\Column(name: "startdate", type: "date", nullable: true)]
     private ?\DateTimeInterface $startdate;
@@ -32,6 +42,16 @@ class Work
     {
         return $this->workid;
     }
+    public function getImage(): ?string
+    {
+return $this->image;
+    }
+    public function setImage(?string  $image): static
+    {
+$this->image = $image;
+        return $this;
+    }
+    
 
     public function getLocation(): ?string
     {

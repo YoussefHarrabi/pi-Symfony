@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Requests List{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #343a40 !important;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .requests-table th,
+        .requests-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .requests-table th {
+            background-color: #007bff;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .requests-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .requests-table tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .add-button:hover {
+            background-color: #218838;
+        }
+
+        .add-button-container {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Requests List</h1>
+        <table class="table requests-table ms">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Start Location</th>
+                    <th>End Location</th>
+                    <th>Departure Time</th>
+                    <th>Seats Wanted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <td>{{ request.startLocation }}</td>
+                        <td>{{ request.endLocation }}</td>
+                        <td>{{ request.departureTime|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ request.numberSeats }}</td>
+                        <td class="actions">
+                           
+                            <a href="{{ path('request_delete', {'id': request.id}) }}" class="btn btn-danger action-button">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #343a40 !important;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .requests-table th,
+        .requests-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .requests-table th {
+            background-color: #007bff;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .requests-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .requests-table tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .add-button:hover {
+            background-color: #218838;
+        }
+
+        .add-button-container {
+            text-align: center;
+        }
+    </style>
+  
+{% endblock %}

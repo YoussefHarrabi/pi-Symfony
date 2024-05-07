@@ -1,0 +1,27 @@
+
+
+{% block content %}
+<div class="card-body">
+  
+<!-- Tableau des Stations -->
+<table id="basic-data-table" class="table nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Adresse</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for Station in Stations %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ Station.name }}</td>
+            <td>{{ Station.address }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+  
+</div>
+{% endblock %}

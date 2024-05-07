@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>  Commun means of transport  </title>
+    <table id="basic-data-table" class="table nowrap" style="width:100%">
+    <style>
+
+     body {
+            font-family: 'Roboto', sans empattement;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center; /* Centre le texte dans l'en-tête */
+            padding: 20px;
+            background-color: #1e90ff;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            padding: 28px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center; /* Centre le contenu du conteneur */
+        }
+
+        h1 {
+            font-size: 30px; /* Taille du titre plus petite */
+            font-style: italic; /* Titre en italique */
+            color: #333;
+            text-align: center; /* Centre le titre */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 10px; /* Bordures arrondies */
+            overflow: hidden; /* Pour garantir que les bords arrondis restent */
+            text-align: center; /* Centre le texte dans le tableau */
+        }
+
+        th, td {
+            padding: 15px;
+            font-style: italic; /* Texte en italique dans les cellules */
+            border: 1px solide #ddd; /* Bordure légère pour les cellules */
+        }
+
+        th {
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e6f7ff;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f0f8ff;
+        }
+
+        tr:hover {
+            background-color: #cce7ff; /* Effet de survol bleu clair */
+        }
+
+        .footer {
+            text-align: center; /* Centre le texte du pied de page */
+            font-size: 14px;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+ <div class="header">
+
+
+
+
+
+
+
+    </div>
+    <div class="container">
+        <h1>Commun means of transport Details</h1>
+        <table>
+            <tr>
+                <th>Registration Number</th>
+                <th>Type</th>
+            </tr>
+            {% for CommunMeansOfTransport in CommunMeansOfTransports %}
+            <tr>
+                <td>{{ CommunMeansOfTransport.registrationNumber }}</td>
+                <td>{{ CommunMeansOfTransport.type }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+       <div class="footer">
+        <p>Date: {{ "now"|date("d-m-Y") }}</p>
+    </div>
+</body>
+</html>
